@@ -1,9 +1,10 @@
 import { Box, useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
 import Navbar from "scenes/navBar";
-import AllVisitorsWidget from "widgets/AllVisitorsWidget";
+import Form from "./Form";
+import { useEffect, useState } from "react";
 
-const HomePage = () => {
+const AddNewVisitorPage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px");
   const { _id, picturePath } = useSelector((state) => state.user);
   return (
@@ -19,7 +20,7 @@ const HomePage = () => {
         {isNonMobileScreens && (
           <Box flexBasis="50%">
             <Box m="2rem 0" />
-            <AllVisitorsWidget userId={_id} />
+            <Form userId={_id} />
           </Box>
         )}
       </Box>
@@ -27,4 +28,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default AddNewVisitorPage;

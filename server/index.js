@@ -10,11 +10,13 @@ import path from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
+import visitorRoutes from "./routes/visitors.js";
 import { register } from "./controllers/auth.js";
 import User from "./models/user.js";
 import Visitor from "./models/Visitor.js";
 import { users, visitors } from "./data/inject.js";
-
+import { createVisitor } from "./controllers/visitors.js";
+import { verifyToken } from "./middleware/auth.js";
 /* CONFIGURATIONS */
 
 const __filename = fileURLToPath(import.meta.url);
@@ -44,6 +46,7 @@ const upload = multer({ storage });
 
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
+app.post("/visitors", verifyToken, createVisitor);
 
 /* ROUTES */
 app.use("/auth", authRoutes);

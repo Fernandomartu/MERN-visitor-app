@@ -15,7 +15,7 @@ const visitorSchema = new mongoose.Schema({
   },
   barcodeId: {
     type: Number,
-    required: true,
+    required: false,
   },
   companyName: {
     type: String,
