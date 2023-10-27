@@ -24,6 +24,7 @@ const AllVisitorsWidget = ({ userId }) => {
       { method: "GET", headers: { Authorization: `Bearer ${token}` } }
     );
     const data = await response.json();
+    console.log(data);
     dispatch(setVisitors({ visitors: data }));
   };
 
@@ -41,21 +42,29 @@ const AllVisitorsWidget = ({ userId }) => {
           onClick={() => {
             navigate("/add-visitor");
           }}
-          sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
+          sx={{ backgroundColor: primaryDark, p: "0.6rem" }}
         >
           <PersonAddOutlined sx={{ color: "#FFFFFF" }} />
         </IconButton>
       </FlexBetween>
       <Box display="flex" flexDirection="column" gap="1.5rem">
-        {visitors.map((visitor) => (
-          <Visitor
-            key={visitor._id}
-            visitorId={visitor._id}
-            name={`${visitor.firstName} ${visitor.lastName}`}
-            subtitle={visitor.occupation}
-            userPicturePath={visitor.picturePath}
-          ></Visitor>
-        ))}
+        {visitors.length > 0 ? (
+          visitors.map((visitor) => (
+            <Visitor
+              key={visitor._id}
+              visitorId={visitor._id}
+              name={`${visitor.firstName} ${visitor.lastName}`}
+              visitorPicturePath={visitor.picturePath}
+              company={visitor.companyName}
+              expirationDate={visitor.ExpirationDate}
+              OnPremises={visitor.OnPremises}
+            />
+          ))
+        ) : (
+          <Typography color={palette.neutral.dark}>
+            No visitors to display
+          </Typography>
+        )}
       </Box>
     </WidgetWrapper>
   );

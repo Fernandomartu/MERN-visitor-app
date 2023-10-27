@@ -1,8 +1,10 @@
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import HomePage from "scenes/homePage";
 import LoginPage from "scenes/loginPage";
+import LandingPage from "scenes/landingPage";
 import ProfilePage from "scenes/profilePage";
 import AddNewVisitorPage from "scenes/addNewVisitorPage";
+import EditVisitorPage from "scenes/editVisitor";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -21,11 +23,16 @@ function App() {
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <Routes>
-              <Route path="/" element={<LoginPage />} />
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<LoginPage />} />
               <Route path="/home" element={<HomePage />} />
-              <Route path="/profile:userId" element={<ProfilePage />} />
+              <Route path="/profile/:userId" element={<ProfilePage />} />
 
               <Route path="/add-visitor" element={<AddNewVisitorPage />} />
+              <Route
+                path="/edit-visitor/:visitorId"
+                element={<EditVisitorPage />}
+              />
             </Routes>
           </ThemeProvider>
         </BrowserRouter>

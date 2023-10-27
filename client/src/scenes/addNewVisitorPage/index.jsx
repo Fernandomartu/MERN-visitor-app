@@ -17,8 +17,13 @@ const AddNewVisitorPage = () => {
         gap="0.5rem"
         justifyContent="center"
       >
-        {isNonMobileScreens && (
-          <Box flexBasis="50%">
+        {isNonMobileScreens ? (
+          <Box flexBasis="70%">
+            <Box m="2rem 0" />
+            <Form userId={_id} />
+          </Box>
+        ) : (
+          <Box flexBasis="90%">
             <Box m="2rem 0" />
             <Form userId={_id} />
           </Box>

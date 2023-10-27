@@ -15,8 +15,9 @@ import { register } from "./controllers/auth.js";
 import User from "./models/user.js";
 import Visitor from "./models/Visitor.js";
 import { users, visitors } from "./data/inject.js";
-import { createVisitor } from "./controllers/visitors.js";
+import { createVisitor, updateVisitor } from "./controllers/visitors.js";
 import { verifyToken } from "./middleware/auth.js";
+
 /* CONFIGURATIONS */
 
 const __filename = fileURLToPath(import.meta.url);
@@ -47,10 +48,13 @@ const upload = multer({ storage });
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
 app.post("/visitors", verifyToken, createVisitor);
+app.patch("/visitors/:id", verifyToken, updateVisitor);
 
 /* ROUTES */
+
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
+app.use("/visitors", visitorRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;

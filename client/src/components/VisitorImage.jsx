@@ -8,7 +8,7 @@ const VisitorImage = ({ image, size = "60px" }) => {
         width={size}
         height={size}
         alt="user"
-        src={`${process.env.REACT_APP_ENDPOINT_BASE_URL}/assets/${image}`}
+        src={`${image}`}
       />
     </Box>
   );

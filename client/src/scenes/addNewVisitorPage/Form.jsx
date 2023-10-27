@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import {
   Box,
   Button,
@@ -17,6 +17,7 @@ import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
 import { DatePicker } from "@mui/x-date-pickers";
 import WidgetWrapper from "components/WidgetWrapper";
+import Webcam from "react-webcam";
 
 const registerVisitorSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -37,6 +38,8 @@ const initialValuesRegister = {
 };
 
 const Form = ({ userId }) => {
+  const webcamRef = useRef(null);
+  const [imgSrc, setImgSrc] = useState(null);
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,28 +51,45 @@ const Form = ({ userId }) => {
 
     values.id = userId;
     values.OnPremises = true;
-    console.log(values);
+    values.image = imgSrc;
+    // console.log(values);
     const formData = new FormData();
 
     for (let value in values) {
       formData.append(value, values[value]);
     }
 
+    for (const pair of formData.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
+
     const savedVisitorResponse = await fetch(
       `${process.env.REACT_APP_ENDPOINT_BASE_URL}/visitors`,
       {
         method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(values),
       }
     );
-
+    const visitors = await savedVisitorResponse.json();
     onSubmitProps.resetForm();
-    console.log(savedVisitorResponse);
+    clearPicture();
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
     await registerVisitor(values, onSubmitProps);
+  };
+
+  const takePicture = () => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setImgSrc(imageSrc);
+  };
+
+  const clearPicture = () => {
+    setImgSrc(null);
   };
 
   return (
@@ -169,39 +189,44 @@ const Form = ({ userId }) => {
                   helperText={touched.phone && errors.phone}
                   sx={{ gridColumn: "span 4" }}
                 />
-                {/* <Box
-                  gridColumn="span 4"
-                  border={`1px solid ${palette.neutral.medium}`}
-                  borderRadius="5px"
-                  p="1rem"
-                >
-                  <Dropzone
-                    acceptedFiles=".jpg, .jpeg, .png"
-                    multiple={false}
-                    onDrop={(acceptedFiles) =>
-                      setFieldValue("picture", acceptedFiles[0])
-                    }
-                  >
-                    {({ getRootProps, getInputProps }) => (
-                      <Box
-                        {...getRootProps()}
-                        border={`2px dashed ${palette.primary.main}`}
-                        p="1rem"
-                        sx={{ "&:hover": { cursor: "pointer" } }}
-                      >
-                        <input {...getInputProps} />
-                        {!values.picture ? (
-                          <p>Add Picture Here</p>
-                        ) : (
-                          <FlexBetween>
-                            <Typography>{values.picture.name}</Typography>
-                            <EditOutlinedIcon />
-                          </FlexBetween>
-                        )}
-                      </Box>
-                    )}
-                  </Dropzone>
-                </Box> */}
+                <Box>
+                  <Typography>Image</Typography>
+                  {imgSrc ? (
+                    <img src={imgSrc} />
+                  ) : (
+                    <Webcam
+                      audio={false}
+                      ref={webcamRef}
+                      screenshotFormat="image/jpeg"
+                      width="200px"
+                    />
+                  )}
+                  {imgSrc ? (
+                    <Button
+                      fullWidth
+                      sx={{
+                        backgroundColor: palette.primary.main,
+                        color: palette.background.alt,
+                        "&:hover": { color: palette.primary.main },
+                      }}
+                      onClick={clearPicture}
+                    >
+                      Retake Picture
+                    </Button>
+                  ) : (
+                    <Button
+                      fullWidth
+                      sx={{
+                        backgroundColor: palette.primary.main,
+                        color: palette.background.alt,
+                        "&:hover": { color: palette.primary.main },
+                      }}
+                      onClick={takePicture}
+                    >
+                      Take Picture
+                    </Button>
+                  )}
+                </Box>
               </>
             </Box>
             <Box>

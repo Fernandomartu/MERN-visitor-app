@@ -24,9 +24,23 @@ const UserSchema = new mongoose.Schema({
     required: true,
     min: 5,
   },
+  review: {
+    type: String,
+    required: false,
+    min: 5,
+  },
   visitors: {
-    type: Array,
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Visitor",
+      },
+    ],
     default: [],
+  },
+  picturePath: {
+    type: String,
+    default: "",
   },
 });
 

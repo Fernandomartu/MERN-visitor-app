@@ -41,6 +41,12 @@ const Navbar = () => {
 
   const fullName = `${user.firstName} ${user.lastName}`;
 
+  const logout = () => {
+    console.log("wroking");
+    dispatch(setLogout());
+    navigate("/");
+  };
+
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
       <FlexBetween gap="20px">
@@ -83,9 +89,7 @@ const Navbar = () => {
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
             )}
           </IconButton>
-          <Message sx={{ fontSize: "25px" }} />
-          <Notifications sx={{ fontSize: "25px" }} />
-          <Help sx={{ fontSize: "25px" }} />
+
           <FormControl variant="standard" value={fullName}>
             <Select
               value={fullName}
@@ -107,7 +111,7 @@ const Navbar = () => {
               <MenuItem value={fullName}>
                 <Typography>{fullName}</Typography>
               </MenuItem>
-              <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
+              <MenuItem onClick={() => logout()}>Log Out</MenuItem>
             </Select>
           </FormControl>
         </FlexBetween>
@@ -158,9 +162,7 @@ const Navbar = () => {
                 <LightMode sx={{ color: dark, fontSize: "25px" }} />
               )}
             </IconButton>
-            <Message sx={{ fontSize: "25px" }} />
-            <Notifications sx={{ fontSize: "25px" }} />
-            <Help sx={{ fontSize: "25px" }} />
+
             <FormControl variant="standard" value={fullName}>
               <Select
                 value={fullName}
@@ -182,9 +184,7 @@ const Navbar = () => {
                 <MenuItem value={fullName}>
                   <Typography>{fullName}</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => dispatch(setLogout())}>
-                  Log Out
-                </MenuItem>
+                <MenuItem onClick={logout()}>Log Out</MenuItem>
               </Select>
             </FormControl>
           </FlexBetween>

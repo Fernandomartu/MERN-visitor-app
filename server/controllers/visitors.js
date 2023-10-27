@@ -1,6 +1,5 @@
 import User from "../models/user.js";
 import Visitor from "../models/Visitor.js";
-import VisitorSequenceSchema from "../models/VisitorSequenceSchema.js";
 
 export const createVisitor = async (req, res) => {
   try {
@@ -12,18 +11,12 @@ export const createVisitor = async (req, res) => {
       companyName,
       ExpirationDate,
       phone,
+      OnPremises,
+      image,
     } = req.body;
 
-    console.log("req body", req.body);
     const user = await User.findById(id);
-
-    const visitorSequence = await VisitorSequenceSchema.findOneAndUpdate(
-      { visitorId: "barcodeId" },
-      { $inc: { sequenceValue: 1 } },
-      { new: true, upsert: true }
-    );
-
-    const newBarcodeId = visitorSequence.sequenceValue;
+    const newBarcodeId = user.visitors.length + 1;
 
     const newVisitor = new Visitor({
       firstName,
@@ -33,33 +26,96 @@ export const createVisitor = async (req, res) => {
       ExpirationDate,
       phone,
       barcodeId: newBarcodeId,
+      OnPremises,
+      picturePath: image,
     });
+    const visitor = await newVisitor.save();
 
-    const savedVisitor = await newVisitor.save();
-
-    user.visitors.push(savedVisitor);
-    res.status(201).json(savedVisitor);
+    user.visitors.push(visitor);
+    await user.save();
+    res.status(201).json(visitor);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-export const getUserVisitors = async (req, res) => {
+export const getVisitor = async (req, res) => {
   try {
-    const { id } = req.params;
-    const user = await User.findById(id);
+    const { visitorId } = req.params;
 
-    const visitors = await Promise.all(
-      user.visitors.map((id) => Visitor.findById(id))
+    const visitor = await Visitor.findById(visitorId);
+
+    res.status(201).json(visitor);
+  } catch (err) {}
+};
+
+export const updateVisitor = async (req, res) => {
+  try {
+    console.log("working");
+    const {
+      visitorId,
+      firstName,
+      lastName,
+      email,
+      companyName,
+      ExpirationDate,
+      phone,
+      OnPremises,
+      image,
+    } = req.body;
+
+    const visitor = await Visitor.findByIdAndUpdate(
+      visitorId,
+      {
+        firstName,
+        lastName,
+        email,
+        companyName,
+        ExpirationDate,
+        phone,
+        OnPremises,
+        picturePath: image, // Update the picturePath
+      },
+      { new: true } // Return the updated visitor
     );
 
-    const formattedVisitors = visitors.map(
-      ({ _id, firstName, lastName, occupation, location, picturePath }) => {
-        return { _id, firstName, lastName, occupation, location, picturePath };
-      }
-    );
-    res.status(200).json(formattedVisitors);
+    if (!visitor) {
+      return res.status(404).json({ error: "Visitor not found" });
+    }
+
+    res.status(201).json(visitor);
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
+// export const getUserVisitors = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const user = await User.findById(id);
+
+//     const visitors = await Promise.all(
+//       user.visitors.map((id) => Visitor.findById(id))
+//     );
+
+//     const formattedVisitors = visitors.map(
+//       ({ _id, firstName, lastName, occupation, location, picturePath }) => {
+//         return { _id, firstName, lastName, occupation, location, picturePath };
+//       }
+//     );
+//     res.status(200).json(formattedVisitors);
+//   } catch (err) {
+//     res.status(404).json({ message: err.message });
+//   }
+// };
+
+// export const removeVisitor = async (req, res) => {
+//   try {
+//     const { id, visitorId } = req.params;
+//     const user = await User.findById(id);
+//     const visitor = await Visitor.findById(visitorId);
+
+//     if (user.visitors.includes(visitorId)) {
+//       user.visitors = user.visitors.filter((id) => id !== visitorId);
+//     }
+//   } catch (err) {}
+// };
