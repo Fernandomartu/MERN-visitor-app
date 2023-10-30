@@ -32,8 +32,6 @@ const Visitor = ({
 
   const isVisitor = visitors.find((visitor) => visitor._id === visitorId);
 
-  console.log(visitors);
-
   const containerStyles = {
     border: "1px solid gray",
     padding: "1rem",

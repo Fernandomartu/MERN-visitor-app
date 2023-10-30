@@ -5,6 +5,8 @@ import LandingPage from "scenes/landingPage";
 import ProfilePage from "scenes/profilePage";
 import AddNewVisitorPage from "scenes/addNewVisitorPage";
 import EditVisitorPage from "scenes/editVisitor";
+import CheckInPage from "scenes/checkInPage";
+import ScanHistoryPage from "scenes/scanHistoryPage";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -33,6 +35,8 @@ function App() {
                 path="/edit-visitor/:visitorId"
                 element={<EditVisitorPage />}
               />
+              <Route path="/check-in" element={<CheckInPage />} />
+              <Route path="/scan-history" element={<ScanHistoryPage />} />
             </Routes>
           </ThemeProvider>
         </BrowserRouter>

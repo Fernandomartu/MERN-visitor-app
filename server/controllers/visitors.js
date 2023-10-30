@@ -16,7 +16,9 @@ export const createVisitor = async (req, res) => {
     } = req.body;
 
     const user = await User.findById(id);
-    const newBarcodeId = user.visitors.length + 1;
+    const newBarcodeId = user.visitorsCreated + 1000;
+    user.visitorsCreated += 1;
+    const newPincode = Math.ceil(Math.random() * 1000000);
 
     const newVisitor = new Visitor({
       firstName,
@@ -28,6 +30,7 @@ export const createVisitor = async (req, res) => {
       barcodeId: newBarcodeId,
       OnPremises,
       picturePath: image,
+      pinCode: newPincode,
     });
     const visitor = await newVisitor.save();
 
@@ -119,3 +122,32 @@ export const updateVisitor = async (req, res) => {
 //     }
 //   } catch (err) {}
 // };
+
+export const validateVisitor = async (req, res) => {
+  try {
+    const { userId, barcodeId, pincode } = req.body;
+
+    const user = await User.findById(userId);
+
+    const visitors = await Promise.all(
+      user.visitors.map((id) => Visitor.findById(id))
+    );
+
+    const matchedVisitor = visitors.filter((visitor) => {
+      return (
+        visitor.barcodeId.toString() == barcodeId &&
+        visitor.pinCode.toString() == pincode
+      );
+    })[0];
+
+    if (!matchedVisitor) {
+      res.status(201).json({ message: "Access Denied" });
+      return;
+    } else {
+      res.status(201).json({ message: "Access Granted" });
+      return;
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

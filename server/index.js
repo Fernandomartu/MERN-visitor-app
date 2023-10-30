@@ -15,7 +15,11 @@ import { register } from "./controllers/auth.js";
 import User from "./models/user.js";
 import Visitor from "./models/Visitor.js";
 import { users, visitors } from "./data/inject.js";
-import { createVisitor, updateVisitor } from "./controllers/visitors.js";
+import {
+  createVisitor,
+  updateVisitor,
+  validateVisitor,
+} from "./controllers/visitors.js";
 import { verifyToken } from "./middleware/auth.js";
 
 /* CONFIGURATIONS */
@@ -48,8 +52,9 @@ const upload = multer({ storage });
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
 app.post("/visitors", verifyToken, createVisitor);
-app.patch("/visitors/:id", verifyToken, updateVisitor);
 
+app.patch("/visitors/:id", verifyToken, updateVisitor);
+app.post("/visitors/validate", verifyToken, validateVisitor);
 /* ROUTES */
 
 app.use("/auth", authRoutes);

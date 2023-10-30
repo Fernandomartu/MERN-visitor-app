@@ -42,6 +42,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  visitorsCreated: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
 });
 
 const User = mongoose.model("User", UserSchema);

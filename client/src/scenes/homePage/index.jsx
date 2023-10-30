@@ -1,9 +1,10 @@
-import { Box, useMediaQuery } from "@mui/material";
+import { Box, useMediaQuery, Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import Navbar from "scenes/navBar";
 import AllVisitorsWidget from "widgets/AllVisitorsWidget";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import WidgetWrapper from "components/WidgetWrapper";
 
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
@@ -27,25 +28,68 @@ const HomePage = () => {
   return (
     <Box>
       <Navbar />
-      <Box
-        width="100%"
-        padding="2rem 6%"
-        display={isNonMobileScreens ? "flex" : "block"}
-        gap="0.5rem"
-        justifyContent="center"
-      >
-        {isNonMobileScreens ? (
-          <Box flexBasis="70%">
-            <Box m="2rem 0" />
+
+      {isNonMobileScreens ? (
+        <Box
+          width="100%"
+          padding="2rem 6%"
+          display={isNonMobileScreens ? "flex" : "block"}
+          gap="0.5rem"
+          justifyContent="space-between"
+        >
+          <Box m="2rem 0" width="70%">
             <AllVisitorsWidget userId={_id} />
           </Box>
-        ) : (
-          <Box flexBasis="90%">
-            <Box m="2rem 0" />
+          <Box m="2rem 0" width="20%">
+            <WidgetWrapper
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              gap="20px"
+            >
+              <Button variant="contained" onClick={() => navigate(`/check-in`)}>
+                Launch Check In Module
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => navigate(`/scan-history`)}
+              >
+                Launch Scan History Module
+              </Button>
+            </WidgetWrapper>
+          </Box>
+        </Box>
+      ) : (
+        <Box
+          width="100%"
+          padding="2rem 6%"
+          display={isNonMobileScreens ? "flex" : "block"}
+          gap="0.5rem"
+          justifyContent="space-between"
+        >
+          <Box m="2rem 0" width="70%">
             <AllVisitorsWidget userId={_id} />
           </Box>
-        )}
-      </Box>
+          <Box m="2rem 0" width="20%">
+            <WidgetWrapper
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              gap="20px"
+            >
+              <Button variant="contained" onClick={() => navigate(`/check-in`)}>
+                Launch Check In Module
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => navigate(`/scan-history`)}
+              >
+                Launch Scan History Module
+              </Button>
+            </WidgetWrapper>
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 };

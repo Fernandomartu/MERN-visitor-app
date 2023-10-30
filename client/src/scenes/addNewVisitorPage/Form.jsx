@@ -52,16 +52,6 @@ const Form = ({ userId }) => {
     values.id = userId;
     values.OnPremises = true;
     values.image = imgSrc;
-    // console.log(values);
-    const formData = new FormData();
-
-    for (let value in values) {
-      formData.append(value, values[value]);
-    }
-
-    for (const pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
 
     const savedVisitorResponse = await fetch(
       `${process.env.REACT_APP_ENDPOINT_BASE_URL}/visitors`,

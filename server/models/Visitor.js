@@ -44,6 +44,11 @@ const visitorSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  pinCode: {
+    type: Number,
+    required: true,
+    min: 6,
+  },
 });
 
 const Visitor = mongoose.model("Visitor", visitorSchema);

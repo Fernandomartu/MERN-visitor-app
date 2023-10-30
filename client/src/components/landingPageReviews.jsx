@@ -42,6 +42,7 @@ const LandingPageReviews = () => {
     const data = await response.json();
 
     setReviews(data);
+    console.log(data);
   };
 
   useEffect(() => {
@@ -67,14 +68,17 @@ const LandingPageReviews = () => {
         justifyContent="center"
       >
         {reviews ? (
-          reviews.map((review, index) => (
-            <ReviewBox
-              key={index}
-              name={`${review.name}`}
-              review={review.review}
-              picturePath={review.picturePath}
-            />
-          ))
+          reviews
+            .filter((review) => review.review !== undefined)
+            .slice(0, 6)
+            .map((review, index) => (
+              <ReviewBox
+                key={index}
+                name={`${review.name}`}
+                review={review.review}
+                picturePath={review.image}
+              />
+            ))
         ) : (
           <Typography color={palette.neutral.dark}>
             No reviews to display

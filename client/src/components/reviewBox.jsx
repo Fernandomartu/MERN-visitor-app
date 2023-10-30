@@ -26,52 +26,43 @@ const ReviewBox = ({ name, review, picturePath }) => {
     padding: "2rem",
     transition: "background-color 0.3s", // Add a smooth transition for the color change
     cursor: "pointer",
-    height: "200px",
+    height: "150px",
     width: "40%",
+    display: "flex",
   };
 
-  const isBetween400And1000 = useMediaQuery(
-    "(min-width: 400px) and (max-width: 1000px)"
+  const isBetween600And1000 = useMediaQuery(
+    "(min-width: 600px) and (max-width: 1000px)"
   );
-  const isSmallerThan400 = useMediaQuery("(max-width: 400px)");
+  const isSmallerThan600 = useMediaQuery("(max-width: 600px)");
 
-  if (isBetween400And1000) {
+  if (isBetween600And1000) {
     containerStyles.width = "60%"; // Change width for screens between 400px and 1000px
-  } else if (isSmallerThan400) {
+  } else if (isSmallerThan600) {
     containerStyles.width = "90%"; // Change width for screens smaller than 400px
   }
 
   return (
     <WidgetWrapper sx={containerStyles}>
-      <FlexBetween gap="1rem">
-        <VisitorImage image={picturePath} size="55px" />
-        <Box
-          onClick={() => {
-            console.log("placeholder");
-          }}
-        >
-          <Typography
-            color={main}
-            variant="h5"
-            fontWeight="500"
-            sx={{
-              "&:hover": { color: palette.primary.light, cursor: "pointer" },
-            }}
-          >
+      <Box
+        gap="1rem"
+        display="flex"
+        overflow="hidden"
+        alignContent="end !important"
+      >
+        <VisitorImage
+          image={`${process.env.REACT_APP_ENDPOINT_BASE_URL}/assets/${picturePath}`}
+          size="80px"
+        />
+        <Box>
+          <Typography color={main} variant="h5" fontWeight="500">
             {name}
           </Typography>
-          <Typography
-            color={main}
-            variant="h6"
-            fontWeight="500"
-            sx={{
-              "&:hover": { color: palette.primary.light, cursor: "pointer" },
-            }}
-          >
+          <Typography color={main} variant="h6" fontWeight="500">
             {review}
           </Typography>
         </Box>
-      </FlexBetween>
+      </Box>
     </WidgetWrapper>
   );
 };
