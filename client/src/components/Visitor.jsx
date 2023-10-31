@@ -1,5 +1,11 @@
 import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setVisitors } from "state";
@@ -20,6 +26,7 @@ const Visitor = ({
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
   const visitors = useSelector((state) => state.user.visitors);
+  const isNonMobileScreens = useMediaQuery("(min-width:600px)");
 
   const [isHovered, setIsHovered] = useState(false);
   const [isDeleteHovered, setIsDeleteHovered] = useState(false);
@@ -74,43 +81,84 @@ const Visitor = ({
         navigateToEditVisitor();
       }}
     >
-      <FlexBetween gap="1rem">
-        <VisitorImage image={visitorPicturePath} size="55px" />
-        <Box
-          onClick={() => {
-            console.log("placeholder");
-          }}
-        >
-          <Typography
-            color={main}
-            variant="h5"
-            fontWeight="500"
-            sx={{
-              "&:hover": { color: palette.primary.light, cursor: "pointer" },
-            }}
+      {isNonMobileScreens && (
+        <>
+          <FlexBetween gap="1rem">
+            <VisitorImage image={visitorPicturePath} size="55px" />
+            <Box
+              onClick={() => {
+                console.log("placeholder");
+              }}
+            >
+              <Typography
+                color={main}
+                variant="h5"
+                fontWeight="500"
+                sx={{
+                  "&:hover": {
+                    color: palette.primary.light,
+                    cursor: "pointer",
+                  },
+                }}
+              >
+                {name}
+              </Typography>
+            </Box>
+            <Typography
+              color={main}
+              variant="h5"
+              fontWeight="500"
+              sx={{
+                "&:hover": { color: palette.primary.light, cursor: "pointer" },
+              }}
+            >
+              {company}
+            </Typography>
+          </FlexBetween>
+          <IconButton
+            onMouseEnter={() => setIsDeleteHovered(true)}
+            onMouseLeave={() => setIsDeleteHovered(false)}
+            onClick={() => deleteVisitor()}
+            sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
           >
-            {name}
-          </Typography>
-        </Box>
-        <Typography
-          color={main}
-          variant="h5"
-          fontWeight="500"
-          sx={{
-            "&:hover": { color: palette.primary.light, cursor: "pointer" },
-          }}
-        >
-          {company}
-        </Typography>
-      </FlexBetween>
-      <IconButton
-        onMouseEnter={() => setIsDeleteHovered(true)}
-        onMouseLeave={() => setIsDeleteHovered(false)}
-        onClick={() => deleteVisitor()}
-        sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
-      >
-        <PersonRemoveOutlined sx={{ color: primaryDark }} />
-      </IconButton>
+            <PersonRemoveOutlined sx={{ color: primaryDark }} />
+          </IconButton>
+        </>
+      )}
+      {!isNonMobileScreens && (
+        <>
+          <FlexBetween gap="1rem">
+            <VisitorImage image={visitorPicturePath} size="55px" />
+            <Box
+              onClick={() => {
+                console.log("placeholder");
+              }}
+            >
+              <Typography
+                color={main}
+                variant="h5"
+                fontWeight="500"
+                sx={{
+                  "&:hover": {
+                    color: palette.primary.light,
+                    cursor: "pointer",
+                  },
+                }}
+              >
+                {name}
+              </Typography>
+            </Box>
+          </FlexBetween>
+          <IconButton
+            onMouseEnter={() => setIsDeleteHovered(true)}
+            onMouseLeave={() => setIsDeleteHovered(false)}
+            onClick={() => deleteVisitor()}
+            sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
+          >
+            <PersonRemoveOutlined sx={{ color: primaryDark }} />
+          </IconButton>
+        </>
+      )}
     </FlexBetween>
   );
 };

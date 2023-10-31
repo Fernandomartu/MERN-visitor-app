@@ -1,14 +1,14 @@
 import { Box } from "@mui/material";
 import Navbar from "scenes/navBar";
-import UserInfoBox from "./visitorInfo";
+import VisitorInfoBox from "./visitorInfo";
 import FlexBetween from "components/FlexBetween";
 
-const ScanHistoryPage = () => {
+const ScanHistoryPage = ({ socket }) => {
   return (
     <Box>
       <Navbar />
       <Box width="100%" display="flex" justifyContent="center !important">
-        <VisitorInfoBox />
+        <VisitorInfoBox socket={socket} />
       </Box>
     </Box>
   );

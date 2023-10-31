@@ -14,6 +14,9 @@ import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import socketIO from "socket.io-client";
+
+const socket = socketIO.connect("http://localhost:3001");
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -35,8 +38,14 @@ function App() {
                 path="/edit-visitor/:visitorId"
                 element={<EditVisitorPage />}
               />
-              <Route path="/check-in" element={<CheckInPage />} />
-              <Route path="/scan-history" element={<ScanHistoryPage />} />
+              <Route
+                path="/check-in"
+                element={<CheckInPage socket={socket} />}
+              />
+              <Route
+                path="/scan-history"
+                element={<ScanHistoryPage socket={socket} />}
+              />
             </Routes>
           </ThemeProvider>
         </BrowserRouter>

@@ -54,7 +54,7 @@ const HomePage = () => {
                 variant="contained"
                 onClick={() => navigate(`/scan-history`)}
               >
-                Launch Scan History Module
+                Launch Scan Log Module
               </Button>
             </WidgetWrapper>
           </Box>
@@ -62,15 +62,12 @@ const HomePage = () => {
       ) : (
         <Box
           width="100%"
-          padding="2rem 6%"
-          display={isNonMobileScreens ? "flex" : "block"}
-          gap="0.5rem"
-          justifyContent="space-between"
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
         >
-          <Box m="2rem 0" width="70%">
-            <AllVisitorsWidget userId={_id} />
-          </Box>
-          <Box m="2rem 0" width="20%">
+          <Box m="2rem 0" width="80%">
             <WidgetWrapper
               display="flex"
               flexDirection="column"
@@ -84,9 +81,12 @@ const HomePage = () => {
                 variant="contained"
                 onClick={() => navigate(`/scan-history`)}
               >
-                Launch Scan History Module
+                Launch Scan Log Module
               </Button>
             </WidgetWrapper>
+          </Box>
+          <Box m="2rem 0" width="90%">
+            <AllVisitorsWidget userId={_id} />
           </Box>
         </Box>
       )}

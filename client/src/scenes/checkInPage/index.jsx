@@ -14,7 +14,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import FlexBetween from "components/FlexBetween";
 import { useForm } from "react-hook-form";
 
-const CheckInPage = () => {
+const CheckInPage = ({ socket }) => {
   const {
     register,
     handleSubmit,
@@ -28,8 +28,11 @@ const CheckInPage = () => {
   const user = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
 
+  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+
   const onSubmit = async (data) => {
     data.userId = user._id;
+    data.token = token;
 
     const response = await fetch(
       `${process.env.REACT_APP_ENDPOINT_BASE_URL}/visitors/validate`,
@@ -44,6 +47,8 @@ const CheckInPage = () => {
     );
     const accessStatus = await response.json();
     showVisitorStatus(accessStatus);
+    console.log(accessStatus);
+    sendToScanModule(data);
   };
 
   const showVisitorStatus = (accessStatus) => {
@@ -54,10 +59,23 @@ const CheckInPage = () => {
     }, 3000);
   };
 
+  const sendToScanModule = (data) => {
+    console.log("working", data);
+    socket.emit("message", {
+      text: data,
+      name: user.firstName,
+      id: `${socket.id}${Math.random()}`,
+      socketID: socket.id,
+    });
+  };
+
   return (
     <Box>
       <Box display="flex" justifyContent="center">
-        <WidgetWrapper marginTop="200px" width="30%">
+        <WidgetWrapper
+          marginTop="200px"
+          width={isNonMobileScreens ? "30%" : "80%"}
+        >
           {!showStatus.show ? (
             <form onSubmit={handleSubmit(onSubmit)}>
               <FlexBetween flexDirection="column" gap="20px" width="100%">
