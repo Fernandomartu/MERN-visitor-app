@@ -27,3 +27,38 @@ export const returnVisitor = async (data) => {
     console.log(err.message);
   }
 };
+
+export const deleteModule = async (socket) => {
+  try {
+    // Find all users
+    const users = await User.find({});
+
+    if (users.length === 0) {
+      return;
+    }
+
+    // Define the socket ID to match against
+    const socketId = socket.id;
+
+    // Iterate through each user
+    for (const user of users) {
+      // Filter the user's modules to keep only those with a different receiverSocketId
+      const updatedModules = user.modules.filter(
+        (module) => module.receiverSocketId !== socketId
+      );
+
+      // Update the user's modules array with the filtered array
+      user.modules = updatedModules;
+
+      if (user.modules.length == 0) {
+        user.modulesCreated = 0;
+      }
+      // Save the user to persist the changes
+      await user.save();
+    }
+
+    console.log("Modules updated successfully");
+  } catch (err) {
+    console.log(err.message);
+  }
+};

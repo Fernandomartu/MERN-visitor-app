@@ -47,12 +47,15 @@ const HomePage = () => {
               justifyContent="center"
               gap="20px"
             >
-              <Button variant="contained" onClick={() => navigate(`/check-in`)}>
+              <Button
+                variant="contained"
+                onClick={() => window.open(`/scan-modules`, "_blank")}
+              >
                 Launch Check In Module
               </Button>
               <Button
                 variant="contained"
-                onClick={() => navigate(`/scan-history`)}
+                onClick={() => window.open(`/scan-history`, "_blank")}
               >
                 Launch Scan Log Module
               </Button>
@@ -74,7 +77,10 @@ const HomePage = () => {
               justifyContent="center"
               gap="20px"
             >
-              <Button variant="contained" onClick={() => navigate(`/check-in`)}>
+              <Button
+                variant="contained"
+                onClick={() => navigate(`/scan-modules`)}
+              >
                 Launch Check In Module
               </Button>
               <Button

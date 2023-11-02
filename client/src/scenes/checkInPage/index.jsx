@@ -5,7 +5,7 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "scenes/navBar";
 import AllVisitorsWidget from "widgets/AllVisitorsWidget";
 import { useNavigate, useParams } from "react-router-dom";
@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import WidgetWrapper from "components/WidgetWrapper";
 import FlexBetween from "components/FlexBetween";
 import { useForm } from "react-hook-form";
+import { setScanModules } from "state";
 
 const CheckInPage = ({ socket }) => {
   const {
@@ -22,17 +23,23 @@ const CheckInPage = ({ socket }) => {
     reset,
     getValues,
   } = useForm();
-
-  const [showStatus, setShowStatus] = useState({ show: false, status: null });
-
+  const moduleId = useParams().id;
+  console.log(moduleId);
   const user = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
+  const module = useSelector(
+    (state) => state.modules.filter((module) => module._id !== moduleId)[0]
+  );
+  const [showStatus, setShowStatus] = useState({ show: false, status: null });
+
+  const updateModule = async () => {};
 
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
 
   const onSubmit = async (data) => {
     data.userId = user._id;
     data.token = token;
+    data.moduleId = module.receiverSocketId;
 
     const response = await fetch(
       `${process.env.REACT_APP_ENDPOINT_BASE_URL}/visitors/validate`,
@@ -70,12 +77,17 @@ const CheckInPage = ({ socket }) => {
   };
 
   return (
-    <Box>
-      <Box display="flex" justifyContent="center">
-        <WidgetWrapper
-          marginTop="200px"
-          width={isNonMobileScreens ? "30%" : "80%"}
-        >
+    <Box width="100%" display="flex" mt="200px" justifyContent="center">
+      <Box
+        width="30%"
+        display="flex"
+        justifyContent="center"
+        flexDirection="column"
+        alignItems="center"
+        gap="50px"
+      >
+        <Typography variant="h1">{`Module # ${moduleId.toString()}`}</Typography>
+        <WidgetWrapper width={isNonMobileScreens ? "100%" : "80%"}>
           {!showStatus.show ? (
             <form onSubmit={handleSubmit(onSubmit)}>
               <FlexBetween flexDirection="column" gap="20px" width="100%">

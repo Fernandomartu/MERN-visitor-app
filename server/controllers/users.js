@@ -102,3 +102,74 @@ export const getUserReviews = async (req, res) => {
     res.status(500).json({ message: "An error occurred" });
   }
 };
+
+export const createModule = async (req, res) => {
+  try {
+    const module = req.body[0];
+    const userId = req.body[1];
+    const user = await User.findById(userId);
+    if (!user) {
+      res.status(200).json({ message: "No user found" });
+      return;
+    }
+
+    user.modules.push(module);
+    user.modulesCreated += 1;
+    await user.save();
+    console.log("module created and saved to user");
+    res.status(201).json({ user });
+  } catch (err) {
+    res.status(500).json({ message: "An error occurred" });
+  }
+};
+
+export const getUserModules = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    const modules = user.modules;
+    if (modules.length == 0) {
+      res.status(200).json({ message: "no modules found" });
+      return;
+    }
+
+    res.status(200).json(modules);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
+export const updateModule = async (req, res) => {
+  try {
+    const { userId, updatedModule } = req.body;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const modules = user.modules;
+
+    // Find the index of the module with matching _id
+    const moduleIndex = modules.findIndex(
+      (module) => module._id === updatedModule._id
+    );
+
+    if (moduleIndex === -1) {
+      return res.status(404).json({ message: "Module not found" });
+    }
+
+    // Update the module with the properties from updatedModule
+    modules[moduleIndex] = updatedModule;
+
+    // Save the updated user object
+    await user.save();
+
+    res
+      .status(200)
+      .json({ message: "Module updated successfully", updatedModule });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

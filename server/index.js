@@ -20,13 +20,14 @@ import {
   updateVisitor,
   validateVisitor,
 } from "./controllers/visitors.js";
+import { createModule } from "./controllers/users.js";
 import { verifyToken } from "./middleware/auth.js";
 import { Server } from "http";
 import { createServer } from "http";
 import { createServer as createHttpServer } from "http";
 import { Server as HttpServer } from "http";
 import { Server as socketServer } from "socket.io";
-import { returnVisitor } from "./socketControllers/scan.js";
+import { returnVisitor, deleteModule } from "./socketControllers/scan.js";
 import { socketVerifyToken } from "./middleware/auth.js";
 /* CONFIGURATIONS */
 
@@ -65,7 +66,7 @@ const socketIO = new socketServer(http, {
 //Add this before the app.get() block
 socketIO.on("connection", async (socket) => {
   console.log(`⚡: ${socket.id} user just connected!`);
-
+  socket.emit("socketId", socket.id);
   socket.on("message", async (data) => {
     try {
       console.log(data.text);
@@ -74,7 +75,7 @@ socketIO.on("connection", async (socket) => {
       if (verified) {
         const processedVisitor = await returnVisitor(data);
         console.log(processedVisitor);
-        socketIO.emit("messageResponse", processedVisitor);
+        socket.to(data.text.moduleId).emit("messageResponse", processedVisitor);
       }
     } catch (error) {
       console.error("Error while processing the visitor:", error);
@@ -82,11 +83,13 @@ socketIO.on("connection", async (socket) => {
   });
   socket.on("disconnect", () => {
     console.log("🔥: A user disconnected");
+    deleteModule(socket);
   });
 });
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
 app.post("/visitors", verifyToken, createVisitor);
+app.post("/create-module", verifyToken, createModule);
 
 app.patch("/visitors/:id", verifyToken, updateVisitor);
 app.post("/visitors/validate", verifyToken, validateVisitor);

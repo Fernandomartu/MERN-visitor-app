@@ -4,6 +4,7 @@ import {
   getUserVisitors,
   removeVisitor,
   getUserReviews,
+  getUserModules,
 } from "../controllers/users.js";
 import { verifyToken } from "../middleware/auth.js";
 
@@ -13,8 +14,9 @@ const router = express.Router();
 router.get("/reviews", getUserReviews);
 router.get("/:id", verifyToken, getUser);
 router.get("/:id/visitors", verifyToken, getUserVisitors);
+router.get("/:id/modules", verifyToken, getUserModules);
 
 /*UPDATE*/
 router.patch("/:id/:visitorId", verifyToken, removeVisitor);
-
+router.patch("/:id/:moduleId", verifyToken, updateModule);
 export default router;

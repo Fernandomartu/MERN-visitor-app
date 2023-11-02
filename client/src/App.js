@@ -7,6 +7,7 @@ import AddNewVisitorPage from "scenes/addNewVisitorPage";
 import EditVisitorPage from "scenes/editVisitor";
 import CheckInPage from "scenes/checkInPage";
 import ScanHistoryPage from "scenes/scanHistoryPage";
+import ModulesListPage from "scenes/modulesListPage";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -39,13 +40,14 @@ function App() {
                 element={<EditVisitorPage />}
               />
               <Route
-                path="/check-in"
+                path="/check-in/:id"
                 element={<CheckInPage socket={socket} />}
               />
               <Route
                 path="/scan-history"
                 element={<ScanHistoryPage socket={socket} />}
               />
+              <Route path="/scan-modules" element={<ModulesListPage />} />
             </Routes>
           </ThemeProvider>
         </BrowserRouter>
