@@ -49,7 +49,7 @@ const HomePage = () => {
             >
               <Button
                 variant="contained"
-                onClick={() => window.open(`/scan-modules`, "_blank")}
+                onClick={() => navigate("/scan-modules")}
               >
                 Launch Check In Module
               </Button>
@@ -79,13 +79,13 @@ const HomePage = () => {
             >
               <Button
                 variant="contained"
-                onClick={() => navigate(`/scan-modules`)}
+                onClick={() => navigate("/scan-modules")}
               >
                 Launch Check In Module
               </Button>
               <Button
                 variant="contained"
-                onClick={() => navigate(`/scan-history`)}
+                onClick={() => window.open(`/scan-history`, "_blank")}
               >
                 Launch Scan Log Module
               </Button>

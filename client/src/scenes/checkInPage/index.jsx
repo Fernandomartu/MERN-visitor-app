@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { setScanModules } from "state";
 
 const CheckInPage = ({ socket }) => {
+  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const {
     register,
     handleSubmit,
@@ -24,22 +25,46 @@ const CheckInPage = ({ socket }) => {
     getValues,
   } = useForm();
   const moduleId = useParams().id;
-  console.log(moduleId);
   const user = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
-  const module = useSelector(
-    (state) => state.modules.filter((module) => module._id !== moduleId)[0]
-  );
   const [showStatus, setShowStatus] = useState({ show: false, status: null });
+  const socketId = socket.id;
+  const [module, setModule] = useState(null);
 
-  const updateModule = async () => {};
+  const updateModule = async (socketId) => {
+    const userId = user._id;
+    const updateModuleData = [
+      userId,
+      { _id: moduleId, senderSocketId: socketId },
+    ];
 
-  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+    const updatedModuleResponse = await fetch(
+      `${process.env.REACT_APP_ENDPOINT_BASE_URL}/users/module`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updateModuleData),
+      }
+    );
+
+    const savedUpdatedModuleResponse = await updatedModuleResponse.json();
+    console.log(savedUpdatedModuleResponse);
+    setModule(savedUpdatedModuleResponse);
+  };
+
+  useEffect(() => {
+    socket.on("socketId", (socketId) => {
+      updateModule(socketId);
+    });
+  }, []);
 
   const onSubmit = async (data) => {
     data.userId = user._id;
     data.token = token;
-    data.moduleId = module.receiverSocketId;
+    data.moduleId = module.finalModule.receiverSocketId;
 
     const response = await fetch(
       `${process.env.REACT_APP_ENDPOINT_BASE_URL}/visitors/validate`,

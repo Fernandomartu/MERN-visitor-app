@@ -64,8 +64,13 @@ const LandingPageHero = () => {
         </Typography>
         <Button
           variant="contained"
-          color="primary"
-          sx={{ backgroundColor: "white", color: "black" }}
+          sx={{
+            backgroundColor: "white",
+            color: "black",
+            "&:hover": {
+              backgroundColor: "#f4f4f4", // Change this to the desired color on hover
+            },
+          }}
         >
           Get started
         </Button>

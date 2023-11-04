@@ -42,7 +42,7 @@ const Module = ({ moduleId }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
-        navigate(`/check-in/${moduleId}`);
+        window.open(`/check-in/${moduleId}`, "_blank");
       }}
     >
       {isNonMobileScreens && (

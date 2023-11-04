@@ -3,6 +3,7 @@ import LandingPageNavbar from "components/landingPageNavbar";
 import LandingPageHero from "components/landingPageHero";
 import LandingPageSecondSection from "components/landingPageSecondSection";
 import LandingPageReviews from "components/landingPageReviews";
+import Footer from "components/Footer";
 
 const LandingPage = () => {
   const theme = useTheme();
@@ -13,6 +14,7 @@ const LandingPage = () => {
       <LandingPageHero />
       <LandingPageSecondSection />
       <LandingPageReviews />
+      <Footer />
     </Box>
   );
 };

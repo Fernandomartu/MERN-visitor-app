@@ -142,7 +142,9 @@ export const getUserModules = async (req, res) => {
 
 export const updateModule = async (req, res) => {
   try {
-    const { userId, updatedModule } = req.body;
+    const userId = req.body[0];
+    const updatedModule = req.body[1];
+    console.log(req.body);
     const user = await User.findById(userId);
 
     if (!user) {
@@ -153,22 +155,27 @@ export const updateModule = async (req, res) => {
 
     // Find the index of the module with matching _id
     const moduleIndex = modules.findIndex(
-      (module) => module._id === updatedModule._id
+      (module) => module._id == updatedModule._id
     );
+
+    console.log(moduleIndex);
 
     if (moduleIndex === -1) {
       return res.status(404).json({ message: "Module not found" });
     }
 
     // Update the module with the properties from updatedModule
-    modules[moduleIndex] = updatedModule;
+    user.modules[moduleIndex].senderSocketId = updatedModule.senderSocketId;
 
+    user.markModified("modules");
+
+    const finalModule = modules[moduleIndex];
     // Save the updated user object
     await user.save();
 
     res
       .status(200)
-      .json({ message: "Module updated successfully", updatedModule });
+      .json({ message: "Module updated successfully", finalModule });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

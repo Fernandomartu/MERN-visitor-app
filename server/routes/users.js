@@ -5,6 +5,7 @@ import {
   removeVisitor,
   getUserReviews,
   getUserModules,
+  updateModule,
 } from "../controllers/users.js";
 import { verifyToken } from "../middleware/auth.js";
 
@@ -18,5 +19,5 @@ router.get("/:id/modules", verifyToken, getUserModules);
 
 /*UPDATE*/
 router.patch("/:id/:visitorId", verifyToken, removeVisitor);
-router.patch("/:id/:moduleId", verifyToken, updateModule);
+router.patch("/module", verifyToken, updateModule);
 export default router;
