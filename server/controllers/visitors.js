@@ -1,4 +1,4 @@
-import User from "../models/user.js";
+import User from "../models/User.js";
 import Visitor from "../models/Visitor.js";
 
 export const createVisitor = async (req, res) => {
