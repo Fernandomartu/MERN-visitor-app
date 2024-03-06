@@ -57,7 +57,7 @@ const upload = multer({ storage });
 
 const socketIO = new socketServer(http, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://mern-vistitor-app-frontend.onrender.com",
   },
 });
 
