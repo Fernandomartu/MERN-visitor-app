@@ -17,7 +17,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import socketIO from "socket.io-client";
 
-const socket = socketIO.connect("http://localhost:3001");
+const socket = socketIO.connect(
+  "https://mern-visitor-tracking-app.onrender.com"
+);
 
 function App() {
   const mode = useSelector((state) => state.mode);
