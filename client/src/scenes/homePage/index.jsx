@@ -85,7 +85,7 @@ const HomePage = () => {
               </Button>
               <Button
                 variant="contained"
-                onClick={() => window.open(`/scan-history`, "_blank")}
+                onClick={() => window.open(`/scan-history`)}
               >
                 Launch Scan Log Module
               </Button>
